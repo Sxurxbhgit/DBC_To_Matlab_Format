@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecotron CAN Data Dictionary</title>
+    <style>
+        /* --- Modern CSS Variables --- */
+        :root {
+            --primary: #4f46e5;       /* Indigo 600 */
+            --primary-hover: #4338ca; /* Indigo 700 */
+            --bg-color: #f8fafc;      /* Slate 50 */
+            --panel-bg: #ffffff;
+            --border: #e2e8f0;        /* Slate 200 */
+            --text-main: #0f172a;     /* Slate 900 */
+            --text-muted: #64748b;    /* Slate 500 */
+            --success: #059669;       /* Emerald 600 */
+            --success-hover: #047857;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --transition: all 0.2s ease-in-out;
+        }
+
+        /* --- Global Reset & Typography --- */
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            line-height: 1.5;
+        }
+
+        /* --- Main Card Layout --- */
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--panel-bg);
+            padding: 35px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* --- Header --- */
+        h2 { 
+            margin-top: 0; 
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            background-image: linear-gradient(90deg, #312e81, #4f46e5);
+            border-bottom: 2px solid #f1f5f9; 
+            padding-bottom: 15px; 
+            margin-bottom: 25px;
+        }
+
+        .section { margin-bottom: 30px; }
+        label { 
+            display: block;
+            font-weight: 600; 
+            font-size: 0.95rem;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        /* --- Inputs & File Browsers --- */
+        input[type="file"], input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: var(--transition);
+            background-color: #f8fafc;
+            outline: none;
+        }
+        
+        input[type="file"]:hover, input[type="text"]:hover { border-color: #cbd5e1; }
+        input[type="text"]:focus { 
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+        
+        /* --- Interactive List Box --- */
+        .list-container {
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            height: 350px;
+            overflow-y: auto;
+            margin-top: 12px;
+            background: #ffffff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        /* Custom Webkit Scrollbar */
+        .list-container::-webkit-scrollbar { width: 8px; }
+        .list-container::-webkit-scrollbar-track { background: transparent; }
+        .list-container::-webkit-scrollbar-thumb { 
+            background: #cbd5e1; 
+            border-radius: 10px; 
+        }
+        .list-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* --- Rows & Checkboxes --- */
+        .msg-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.15s;
+        }
+        .msg-item:last-child { border-bottom: none; }
+        .msg-item:hover { background-color: #f1f5f9; }
+        
+        .msg-item label { 
+            cursor: pointer; 
+            width: 100%; 
+            margin-left: 12px; 
+            margin-bottom: 0;
+            font-weight: 500;
+            color: #475569;
+            user-select: none;
+        }
+        
+        .msg-item input[type="checkbox"] { 
+            cursor: pointer; 
+            width: 18px; 
+            height: 18px; 
+            accent-color: var(--primary); /* Modern colored checkboxes */
+            margin: 0;
+        }
+
+        /* --- Buttons --- */
+        .action-buttons { 
+            display: flex; 
+            gap: 12px; 
+            margin-top: 12px; 
+        }
+        
+        button {
+            background-color: var(--primary); 
+            color: white;
+            border: none; 
+            padding: 10px 16px; 
+            border-radius: 8px;
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            transition: var(--transition);
+            flex: 1;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        button:hover:not(:disabled) { 
+            background-color: var(--primary-hover); 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+        button:active:not(:disabled) { transform: translateY(0); }
+        button:disabled { 
+            background-color: #cbd5e1; 
+            color: #f1f5f9;
+            cursor: not-allowed; 
+            box-shadow: none;
+            transform: none;
+        }
+        
+        #generate-btn {
+            background-color: var(--success); 
+            font-size: 1.05rem; 
+            padding: 16px; 
+            margin-top: 25px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        #generate-btn:hover:not(:disabled) { 
+            background-color: var(--success-hover); 
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+        }
+
+        /* --- Status Text --- */
+        .status-text { 
+            font-size: 0.85rem; 
+            font-weight: 500;
+            color: var(--text-muted); 
+            margin-top: 8px; 
+            display: inline-block; 
+        }
+        .success-text { color: var(--success); font-weight: 700; }
+        .processing-text { color: var(--primary); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Ecotron CAN Data Dictionary</h2>
+
+    <div class="section">
+        <label>1. Select DBC File</label>
+        <input type="file" id="fileInput" accept=".dbc,.txt">
+        <span class="status-text" id="fileStatus">Awaiting file upload...</span>
+    </div>
+
+    <div class="section">
+        <label>2. Search & Select Messages</label>
+        <input type="text" id="searchInput" placeholder="Type to search available messages..." disabled>
+        
+        <div class="action-buttons">
+            <button id="selectAllBtn" disabled>Select All Visible</button>
+            <button id="clearAllBtn" disabled>Clear Selections</button>
+        </div>
+
+        <div class="list-container" id="messageList">
+            <div style="padding: 20px; color: #94a3b8; text-align: center; font-style: italic;">
+                Load a DBC file to see messages.
+            </div>
+        </div>
+        <span class="status-text" id="selectionStatus">0 messages selected.</span>
+    </div>
+
+    <div class="section" style="margin-bottom: 0;">
+        <label>3. Output Configuration</label>
+        <input type="text" id="outputName" value="Ev_Demo_M.m">
+        
+        <button id="generate-btn" disabled>Generate MATLAB Script</button>
+    </div>
+</div>
+
+<script>
+    // --- Application State ---
+    let parsedDbcData = {};
+    let allMsgNames = [];
+    let selectedMessages = new Set();
+    let searchDebounceTimeout = null;
+    const displayLimit = 500; 
+
+    // --- DOM Elements ---
+    const fileInput = document.getElementById('fileInput');
+    const fileStatus = document.getElementById('fileStatus');
+    const searchInput = document.getElementById('searchInput');
+    const messageList = document.getElementById('messageList');
+    const selectionStatus = document.getElementById('selectionStatus');
+    const selectAllBtn = document.getElementById('selectAllBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const generateBtn = document.getElementById('generate-btn');
+    const outputName = document.getElementById('outputName');
+
+    // --- Regex Patterns ---
+    const msgPattern = /^BO_\s+(\d+)\s+(\w+):\s+(\d+)\s+(\w+)/;
+    const sigPattern = /^\s*SG_\s+(\w+).*?:\s+(\d+)\|(\d+)@([01])([+-])\s+\(([^,]+),([^)]+)\)\s+\[.*?\]\s+"(.*?)"/;
+
+    // --- Event Listeners ---
+    fileInput.addEventListener('change', handleFileUpload);
+    searchInput.addEventListener('input', handleSearch);
+    selectAllBtn.addEventListener('click', selectAllVisible);
+    clearAllBtn.addEventListener('click', clearAllSelections);
+    generateBtn.addEventListener('click', generateMatlabScript);
+
+    // --- Core Functions ---
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        fileStatus.innerHTML = "Parsing massive file, please wait... ⏳";
+        fileStatus.className = "status-text processing-text";
+        disableUI(true);
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            setTimeout(() => parseDbcText(e.target.result), 50); 
+        };
+        reader.readAsText(file);
+    }
+
+    function parseDbcText(text) {
+        parsedDbcData = {};
+        allMsgNames = [];
+        selectedMessages.clear();
+        let currentMsg = null;
+
+        const lines = text.split('\n');
+        
+        for (let line of lines) {
+            const msgMatch = line.match(msgPattern);
+            if (msgMatch) {
+                const rawId = parseInt(msgMatch[1], 10);
+                const name = msgMatch[2];
+                const dlc = parseInt(msgMatch[3], 10);
+                const node = msgMatch[4];
+
+                const realId = rawId & 0x1FFFFFFF;
+                const isExtended = (rawId > 0x1FFFFFFF) || (realId > 0x7FF);
+
+                currentMsg = {
+                    name: name, id_dec: realId, id_hex: realId.toString(16).toUpperCase(),
+                    idext: isExtended ? 'EXTENDED' : 'STANDARD', payload_size: dlc, node: node, signals: []
+                };
+                parsedDbcData[name] = currentMsg;
+                allMsgNames.push(name);
+                continue;
+            }
+
+            if (currentMsg) {
+                const sigMatch = line.match(sigPattern);
+                if (sigMatch) {
+                    currentMsg.signals.push({
+                        name: sigMatch[1], start_bit: parseInt(sigMatch[2], 10), bit_length: parseInt(sigMatch[3], 10),
+                        byte_order: sigMatch[4] === '0' ? 'BIG_ENDIAN' : 'LITTLE_ENDIAN',
+                        data_type: sigMatch[5] === '+' ? 'UNSIGNED' : 'SIGNED',
+                        scale: sigMatch[6], offset: sigMatch[7], units: sigMatch[8]
+                    });
+                }
+            }
+        }
+
+        fileStatus.innerHTML = `✅ Successfully loaded <b>${allMsgNames.length}</b> messages.`;
+        fileStatus.className = "status-text success-text";
+        disableUI(false);
+        searchInput.value = ""; 
+        renderList();
+    }
+
+    function handleSearch() {
+        clearTimeout(searchDebounceTimeout);
+        searchDebounceTimeout = setTimeout(renderList, 250); 
+    }
+
+    function renderList() {
+        const query = searchInput.value.toLowerCase();
+        let filtered = allMsgNames;
+        if (query !== "") {
+            filtered = allMsgNames.filter(name => name.toLowerCase().includes(query));
+        }
+
+        const displayData = filtered.slice(0, displayLimit);
+        let htmlStr = '';
+        displayData.forEach(name => {
+            const isChecked = selectedMessages.has(name) ? 'checked' : '';
+            htmlStr += `
+                <div class="msg-item">
+                    <input type="checkbox" id="chk_${name}" value="${name}" onchange="toggleSelection(this)" ${isChecked}>
+                    <label for="chk_${name}">${name}</label>
+                </div>
+            `;
+        });
+
+        if (displayData.length === 0) {
+            htmlStr = `<div style="padding: 20px; color: #94a3b8; text-align: center; font-style: italic;">No messages match your search.</div>`;
+        }
+
+        messageList.innerHTML = htmlStr;
+
+        if (filtered.length > displayLimit) {
+            selectionStatus.innerHTML = `Showing top ${displayLimit} of ${filtered.length} matches. | <b style="color:var(--primary)">${selectedMessages.size} selected.</b>`;
+        } else {
+            selectionStatus.innerHTML = `Showing ${filtered.length} matches. | <b style="color:var(--primary)">${selectedMessages.size} selected.</b>`;
+        }
+    }
+
+    window.toggleSelection = function(checkbox) {
+        if (checkbox.checked) selectedMessages.add(checkbox.value);
+        else selectedMessages.delete(checkbox.value);
+        updateSelectionStatus();
+    }
+
+    function selectAllVisible() {
+        const checkboxes = messageList.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(chk => {
+            chk.checked = true;
+            selectedMessages.add(chk.value);
+        });
+        updateSelectionStatus();
+    }
+
+    function clearAllSelections() {
+        selectedMessages.clear();
+        const checkboxes = messageList.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(chk => chk.checked = false);
+        updateSelectionStatus();
+    }
+
+    function updateSelectionStatus() {
+        const text = selectionStatus.innerHTML.split('|')[0];
+        selectionStatus.innerHTML = `${text}| <b style="color:var(--primary)">${selectedMessages.size} selected.</b>`;
+    }
+
+    function disableUI(disabled) {
+        searchInput.disabled = disabled;
+        selectAllBtn.disabled = disabled;
+        clearAllBtn.disabled = disabled;
+        generateBtn.disabled = disabled;
+    }
+
+    function generateMatlabScript() {
+        if (Object.keys(parsedDbcData).length === 0) return;
+
+        let targetMsgs = Array.from(selectedMessages);
+        if (targetMsgs.length === 0) {
+            const confirmAll = confirm("You haven't selected any specific messages.\n\nDo you want to convert ALL parsed messages in the entire DBC file?");
+            if (confirmAll) targetMsgs = allMsgNames;
+            else return;
+        }
+
+        const structName = "ECOCAN";
+        let outStr = [];
+
+        outStr.push(`function msg = Ev_Demo_M(msgname,type)`);
+        outStr.push(`  if(255==type)`);
+        outStr.push(`  msg = struct;`);
+        outStr.push(`  msg.num=${targetMsgs.length};`);
+        outStr.push(`  msg.list= cell(1, msg.num);`);
+
+        targetMsgs.forEach((msgName, idx) => {
+            outStr.push(`  msg.list{${idx + 1}}='${msgName}';`);
+        });
+
+        outStr.push(`  else `);
+        outStr.push(`  msg = struct;`);
+        outStr.push(`  switch msgname `);
+
+        targetMsgs.forEach((msgName, idx) => {
+            const msg = parsedDbcData[msgName];
+            outStr.push(`%%`);
+            outStr.push(`%Network Node:${msg.node}`);
+            outStr.push(`%Message Name:${msgName}`);
+            outStr.push(`%Message Number:${idx + 1}`);
+            outStr.push(`case '${msgName}'`);
+            
+            outStr.push(`    ${structName}.${msgName} = struct;`);
+            outStr.push(`    ${structName}.${msgName} .name = '${msgName}';`);
+            outStr.push(`    ${structName}.${msgName}.description = '${msgName}';`);
+            outStr.push(`    ${structName}.${msgName}.protocol  = 'ECOCAN';`);
+            outStr.push(`    ${structName}.${msgName}.id = hex2dec('${msg.id_hex}');`);
+            outStr.push(`    ${structName}.${msgName}.idext = '${msg.idext}';`);
+            outStr.push(`    ${structName}.${msgName}.payload_size =${msg.payload_size};`);
+            outStr.push(`    ${structName}.${msgName}.interval =-1;\n`);
+
+            msg.signals.forEach((sig, sIdx) => {
+                outStr.push(`    ${structName}.${msgName}.fields{${sIdx + 1}}.name = '${sig.name}';`);
+                outStr.push(`    ${structName}.${msgName}.fields{${sIdx + 1}}.units = '${sig.units}';`);
+                outStr.push(`    ${structName}.${msgName}.fields{${sIdx + 1}}.start_bit = ${sig.start_bit};`);
+                outStr.push(`    ${structName}.${msgName}.fields{${sIdx + 1}}.bit_length = ${sig.bit_length};`);
+                outStr.push(`    ${structName}.${msgName}.fields{${sIdx + 1}}.byte_order = '${sig.byte_order}';`);
+                outStr.push(`    ${structName}.${msgName}.fields{${sIdx + 1}}.data_type = '${sig.data_type}';`);
+                outStr.push(`    ${structName}.${msgName}.fields{${sIdx + 1}}.scale = ${sig.scale};`);
+                outStr.push(`    ${structName}.${msgName}.fields{${sIdx + 1}}.offset = ${sig.offset};\n`);
+            });
+        });
+
+        outStr.push(`  end`);
+        outStr.push(`  try`);
+        outStr.push(`    msg = ${structName}.(msgname);`);
+        outStr.push(`  catch`);
+        outStr.push(`  end`);
+        outStr.push(`end`);
+        outStr.push(`end\n`);
+
+        let filename = outputName.value.trim() || "Ev_Demo_M.m";
+        if (!filename.endsWith(".m")) filename += ".m";
+
+        const blob = new Blob([outStr.join('\n')], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }
+</script>
+
+</body>
+</html>
