@@ -3,30 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matlab CAN Data Dictionary</title>
+    <title>Matlab CAN data directory</title>
     <style>
-        /* --- Modern CSS Variables --- */
         :root {
-            --primary: #4f46e5;       /* Indigo 600 */
-            --primary-hover: #4338ca; /* Indigo 700 */
-            --bg-color: #f8fafc;      /* Slate 50 */
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
             --panel-bg: #ffffff;
-            --border: #e2e8f0;        /* Slate 200 */
-            --text-main: #0f172a;     /* Slate 900 */
-            --text-muted: #64748b;    /* Slate 500 */
-            --success: #059669;       /* Emerald 600 */
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --success: #059669;
             --success-hover: #047857;
+            --error: #dc2626;
+            --error-bg: #fef2f2;
+            --warning: #d97706;
+            --warning-bg: #fffbeb;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
             --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
             --radius: 12px;
             --transition: all 0.2s ease-in-out;
         }
 
-        /* --- Global Reset & Typography --- */
         * { box-sizing: border-box; }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
@@ -36,178 +38,83 @@
             line-height: 1.5;
         }
 
-        /* --- Main Card Layout --- */
         .container {
-            width: 100%;
-            max-width: 850px;
-            background: var(--panel-bg);
-            padding: 35px 40px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-md);
+            width: 100%; max-width: 850px; background: var(--panel-bg); padding: 35px 40px;
+            border-radius: var(--radius); box-shadow: var(--shadow-md);
         }
 
-        /* --- Header --- */
         h2 { 
-            margin-top: 0; 
-            font-size: 1.75rem;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-            color: transparent;
-            background-clip: text;
-            -webkit-background-clip: text;
-            background-image: linear-gradient(90deg, #312e81, #4f46e5);
-            border-bottom: 2px solid #f1f5f9; 
-            padding-bottom: 15px; 
-            margin-bottom: 25px;
+            margin-top: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.025em;
+            color: transparent; background-clip: text; -webkit-background-clip: text;
+            background-image: linear-gradient(90deg, #312e81, #4f46e5); border-bottom: 2px solid #f1f5f9; 
+            padding-bottom: 15px; margin-bottom: 25px;
         }
 
         .section { margin-bottom: 30px; }
-        label { 
-            display: block;
-            font-weight: 600; 
-            font-size: 0.95rem;
-            color: #334155;
-            margin-bottom: 8px;
-        }
+        label { display: block; font-weight: 600; font-size: 0.95rem; color: #334155; margin-bottom: 8px; }
 
-        /* --- Inputs & File Browsers --- */
         input[type="file"], input[type="text"] {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            transition: var(--transition);
-            background-color: #f8fafc;
-            outline: none;
+            width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px;
+            font-size: 0.95rem; color: var(--text-main); transition: var(--transition);
+            background-color: #f8fafc; outline: none;
         }
-        
         input[type="file"]:hover, input[type="text"]:hover { border-color: #cbd5e1; }
-        input[type="text"]:focus { 
-            border-color: var(--primary);
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-        }
+        input[type="text"]:focus { border-color: var(--primary); background-color: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
         
-        /* --- Interactive List Box --- */
         .list-container {
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            height: 350px;
-            overflow-y: auto;
-            margin-top: 12px;
-            background: #ffffff;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            border: 2px solid var(--border); border-radius: 8px; height: 350px; overflow-y: auto;
+            margin-top: 12px; background: #ffffff;
         }
-        
-        /* Custom Webkit Scrollbar */
         .list-container::-webkit-scrollbar { width: 8px; }
         .list-container::-webkit-scrollbar-track { background: transparent; }
-        .list-container::-webkit-scrollbar-thumb { 
-            background: #cbd5e1; 
-            border-radius: 10px; 
-        }
+        .list-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .list-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* --- Rows & Checkboxes --- */
-        .msg-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            border-bottom: 1px solid #f1f5f9;
-            transition: background-color 0.15s;
-        }
+        .msg-item { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f1f5f9; transition: background-color 0.15s; }
         .msg-item:last-child { border-bottom: none; }
         .msg-item:hover { background-color: #f1f5f9; }
-        
-        .msg-item label { 
-            cursor: pointer; 
-            width: 100%; 
-            margin-left: 12px; 
-            margin-bottom: 0;
-            font-weight: 500;
-            color: #475569;
-            user-select: none;
-        }
-        
-        .msg-item input[type="checkbox"] { 
-            cursor: pointer; 
-            width: 18px; 
-            height: 18px; 
-            accent-color: var(--primary); /* Modern colored checkboxes */
-            margin: 0;
-        }
+        .msg-item label { cursor: pointer; width: 100%; margin-left: 12px; margin-bottom: 0; font-weight: 500; user-select: none; }
+        .msg-item input[type="checkbox"] { cursor: pointer; width: 18px; height: 18px; accent-color: var(--primary); margin: 0; }
 
-        /* --- Buttons --- */
-        .action-buttons { 
-            display: flex; 
-            gap: 12px; 
-            margin-top: 12px; 
-        }
-        
+        .action-buttons { display: flex; gap: 12px; margin-top: 12px; }
         button {
-            background-color: var(--primary); 
-            color: white;
-            border: none; 
-            padding: 10px 16px; 
-            border-radius: 8px;
-            cursor: pointer; 
-            font-weight: 600; 
-            font-size: 0.9rem;
-            transition: var(--transition);
-            flex: 1;
-            box-shadow: var(--shadow-sm);
+            background-color: var(--primary); color: white; border: none; padding: 10px 16px; 
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            transition: var(--transition); flex: 1; box-shadow: var(--shadow-sm);
         }
+        button:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-1px); }
+        button:disabled { background-color: #cbd5e1; color: #f1f5f9; cursor: not-allowed; box-shadow: none; transform: none; }
         
-        button:hover:not(:disabled) { 
-            background-color: var(--primary-hover); 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
-        }
-        button:active:not(:disabled) { transform: translateY(0); }
-        button:disabled { 
-            background-color: #cbd5e1; 
-            color: #f1f5f9;
-            cursor: not-allowed; 
-            box-shadow: none;
-            transform: none;
-        }
-        
-        #generate-btn {
-            background-color: var(--success); 
-            font-size: 1.05rem; 
-            padding: 16px; 
-            margin-top: 25px;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-        #generate-btn:hover:not(:disabled) { 
-            background-color: var(--success-hover); 
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
-        }
+        #generate-btn { background-color: var(--success); font-size: 1.05rem; padding: 16px; margin-top: 25px; letter-spacing: 0.05em; text-transform: uppercase; }
+        #generate-btn:hover:not(:disabled) { background-color: var(--success-hover); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2); }
 
-        /* --- Status Text --- */
-        .status-text { 
-            font-size: 0.85rem; 
-            font-weight: 500;
-            color: var(--text-muted); 
-            margin-top: 8px; 
-            display: inline-block; 
-        }
+        .status-text { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 8px; display: inline-block; }
         .success-text { color: var(--success); font-weight: 700; }
-        .processing-text { color: var(--primary); font-weight: 700; }
+        
+        #validationReport { display: none; margin-top: 15px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+        .report-header { background: #f8fafc; padding: 10px 15px; font-weight: bold; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; cursor: pointer; }
+        .report-body { max-height: 250px; overflow-y: auto; padding: 10px; background: #fff; font-size: 0.85rem; font-family: monospace; }
+        .log-error { color: var(--error); background: var(--error-bg); padding: 5px; margin-bottom: 4px; border-radius: 4px; border-left: 3px solid var(--error); }
+        .log-warn { color: var(--warning); background: var(--warning-bg); padding: 5px; margin-bottom: 4px; border-radius: 4px; border-left: 3px solid var(--warning); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Matlab CAN Data Dictionary</h2>
+    <h2>Matlab CAN data directory</h2>
 
     <div class="section">
         <label>1. Select DBC File</label>
         <input type="file" id="fileInput">
         <span class="status-text" id="fileStatus">Awaiting file upload...</span>
+        
+        <div id="validationReport">
+            <div class="report-header" onclick="toggleReport()">
+                <span id="reportTitle">Validation Report</span>
+                <span id="reportToggle">▼</span>
+            </div>
+            <div class="report-body" id="reportBody"></div>
+        </div>
     </div>
 
     <div class="section">
@@ -221,7 +128,7 @@
 
         <div class="list-container" id="messageList">
             <div style="padding: 20px; color: #94a3b8; text-align: center; font-style: italic;">
-                Load a DBC file to see messages.
+                Load a valid DBC file to see messages.
             </div>
         </div>
         <span class="status-text" id="selectionStatus">0 messages selected.</span>
@@ -230,13 +137,12 @@
     <div class="section" style="margin-bottom: 0;">
         <label>3. Output Configuration</label>
         <input type="text" id="outputName" value="Ev_Demo_M.m">
-        
         <button id="generate-btn" disabled>Generate MATLAB Script</button>
     </div>
 </div>
 
 <script>
-    // --- Application State ---
+    // --- State ---
     let parsedDbcData = {};
     let allMsgNames = [];
     let selectedMessages = new Set();
@@ -253,80 +159,200 @@
     const clearAllBtn = document.getElementById('clearAllBtn');
     const generateBtn = document.getElementById('generate-btn');
     const outputName = document.getElementById('outputName');
+    const validationReport = document.getElementById('validationReport');
+    const reportTitle = document.getElementById('reportTitle');
+    const reportBody = document.getElementById('reportBody');
+    let reportOpen = false;
 
-    // --- Regex Patterns ---
-    const msgPattern = /^BO_\s+(\d+)\s+(\w+):\s+(\d+)\s+(\w+)/;
-    const sigPattern = /^\s*SG_\s+(\w+).*?:\s+(\d+)\|(\d+)@([01])([+-])\s+\(([^,]+),([^)]+)\)\s+\[.*?\]\s+"(.*?)"/;
+    // --- Indestructible Regex Patterns ---
+    const msgPattern = /^BO_\s+(\d+)\s+([^:]+?)\s*:\s+(\d+)\s*(.*)/;
+    
+    // Highly tolerant signal regex. Accounts for missing quotes, weird spacing, and multiplexers
+    const sigPattern = /^\s*SG_\s+([^:]+?)\s*:\s*(\d+)\s*\|\s*(\d+)\s*@\s*([01])\s*([+-])?\s*\(\s*([^,]+)\s*,\s*([^)]+)\s*\)\s*\[\s*([^|]+)\s*\|\s*([^\]]+)\s*\]\s*(?:"(.*?)")?/;
 
-    // --- Event Listeners ---
+    // --- Events ---
     fileInput.addEventListener('change', handleFileUpload);
     searchInput.addEventListener('input', handleSearch);
     selectAllBtn.addEventListener('click', selectAllVisible);
     clearAllBtn.addEventListener('click', clearAllSelections);
     generateBtn.addEventListener('click', generateMatlabScript);
 
-    // --- Core Functions ---
+    function toggleReport() {
+        reportOpen = !reportOpen;
+        reportBody.style.display = reportOpen ? 'block' : 'none';
+        document.getElementById('reportToggle').innerText = reportOpen ? '▲' : '▼';
+    }
+
+    // --- Validation Engine ---
+    function validateDbc(messagesDict) {
+        let errors = [];
+        let warnings = [];
+
+        for (const [msgName, msg] of Object.entries(messagesDict)) {
+            
+            // Bypass physical structural validation for Vector dummy messages
+            const isDummyMessage = (msgName === 'VECTOR__INDEPENDENT_SIG_MSG');
+            const maxPayloadBits = msg.payload_size * 8;
+            let usedBits = new Set();
+
+            msg.signals.forEach(sig => {
+                
+                // 1. Structural Checks
+                if (!isDummyMessage) {
+                    if (sig.start_bit >= maxPayloadBits && maxPayloadBits > 0) {
+                        errors.push(`[${msgName} -> ${sig.name}] Start bit (${sig.start_bit}) exceeds payload boundary (${msg.payload_size} bytes).`);
+                    }
+
+                    let bitIndices = [];
+                    if (sig.byte_order === 'LITTLE_ENDIAN') { 
+                        for (let i = 0; i < sig.bit_length; i++) bitIndices.push(sig.start_bit + i);
+                    } else {
+                        let curr = sig.start_bit;
+                        for (let i = 0; i < sig.bit_length; i++) {
+                            bitIndices.push(curr);
+                            if (curr % 8 === 0) curr += 15; else curr -= 1;
+                        }
+                    }
+
+                    let overlaps = false;
+                    bitIndices.forEach(b => {
+                        if (usedBits.has(b)) overlaps = true;
+                        usedBits.add(b);
+                    });
+
+                    if (overlaps) {
+                        warnings.push(`[${msgName} -> ${sig.name}] Bits physically overlap with another signal. (Ignore if multiplexed).`);
+                    }
+                }
+
+                // 2. Math & Bounding Data Check 
+                const L = sig.bit_length;
+                if (L > 64) {
+                    errors.push(`[${msgName} -> ${sig.name}] Length (${L} bits) exceeds 64-bit limits.`);
+                } else {
+                    let maxRaw = sig.data_type === 'UNSIGNED' ? Math.pow(2, L) - 1 : Math.pow(2, L - 1) - 1;
+                    let minRaw = sig.data_type === 'UNSIGNED' ? 0 : -Math.pow(2, L - 1);
+                    
+                    if (sig.scale !== 0) {
+                        // Math.min/max safely handles negative scaling factors flipping the bounds
+                        let raw1 = (sig.min - sig.offset) / sig.scale;
+                        let raw2 = (sig.max - sig.offset) / sig.scale;
+                        let declaredMinRaw = Math.min(raw1, raw2);
+                        let declaredMaxRaw = Math.max(raw1, raw2);
+                        
+                        if (declaredMaxRaw > maxRaw + 0.001 || declaredMinRaw < minRaw - 0.001) {
+                            warnings.push(`[${msgName} -> ${sig.name}] Declared bounds [${sig.min}|${sig.max}] mathematically exceed the max raw capacity of a ${L}-bit ${sig.data_type.toLowerCase()} signal.`);
+                        }
+                    }
+                }
+            });
+        }
+        return { errors, warnings };
+    }
+
+    // --- Parser Core ---
     function handleFileUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
 
-        fileStatus.innerHTML = "Parsing massive file, please wait... ⏳";
+        fileStatus.innerHTML = "Scanning, Parsing, and Validating... ⏳";
         fileStatus.className = "status-text processing-text";
         disableUI(true);
+        validationReport.style.display = 'none';
 
         const reader = new FileReader();
-        reader.onload = function(e) {
-            setTimeout(() => parseDbcText(e.target.result), 50); 
-        };
+        reader.onload = function(e) { setTimeout(() => parseDbcText(e.target.result), 50); };
         reader.readAsText(file);
     }
 
     function parseDbcText(text) {
-        parsedDbcData = {};
-        allMsgNames = [];
-        selectedMessages.clear();
-        let currentMsg = null;
+        try {
+            parsedDbcData = {};
+            allMsgNames = [];
+            selectedMessages.clear();
+            let currentMsg = null;
+            let totalSignalsFound = 0;
 
-        const lines = text.split('\n');
-        
-        for (let line of lines) {
-            const msgMatch = line.match(msgPattern);
-            if (msgMatch) {
-                const rawId = parseInt(msgMatch[1], 10);
-                const name = msgMatch[2];
-                const dlc = parseInt(msgMatch[3], 10);
-                const node = msgMatch[4];
+            if (!text || text.trim().length === 0) throw new Error("The uploaded file is completely empty.");
+            if (!text.includes("BO_ ")) throw new Error("Invalid format. No 'BO_' CAN messages found in file.");
 
-                const realId = rawId & 0x1FFFFFFF;
-                const isExtended = (rawId > 0x1FFFFFFF) || (realId > 0x7FF);
+            const lines = text.split('\n');
+            
+            for (let line of lines) {
+                const msgMatch = line.match(msgPattern);
+                if (msgMatch) {
+                    const rawId = parseInt(msgMatch[1], 10);
+                    const isExtended = (rawId & 0x80000000) !== 0; 
+                    const realId = rawId & 0x1FFFFFFF; 
+                    
+                    const name = msgMatch[2].trim();
+                    const dlc = parseInt(msgMatch[3], 10);
+                    const node = msgMatch[4].trim();
 
-                currentMsg = {
-                    name: name, id_dec: realId, id_hex: realId.toString(16).toUpperCase(),
-                    idext: isExtended ? 'EXTENDED' : 'STANDARD', payload_size: dlc, node: node, signals: []
-                };
-                parsedDbcData[name] = currentMsg;
-                allMsgNames.push(name);
-                continue;
-            }
+                    currentMsg = {
+                        name: name, id_dec: realId, id_hex: realId.toString(16).toUpperCase(),
+                        idext: isExtended ? 'EXTENDED' : 'STANDARD', payload_size: dlc, node: node, signals: []
+                    };
+                    parsedDbcData[name] = currentMsg;
+                    allMsgNames.push(name);
+                    continue;
+                }
 
-            if (currentMsg) {
-                const sigMatch = line.match(sigPattern);
-                if (sigMatch) {
-                    currentMsg.signals.push({
-                        name: sigMatch[1], start_bit: parseInt(sigMatch[2], 10), bit_length: parseInt(sigMatch[3], 10),
-                        byte_order: sigMatch[4] === '0' ? 'BIG_ENDIAN' : 'LITTLE_ENDIAN',
-                        data_type: sigMatch[5] === '+' ? 'UNSIGNED' : 'SIGNED',
-                        scale: sigMatch[6], offset: sigMatch[7], units: sigMatch[8]
-                    });
+                if (currentMsg) {
+                    const sigMatch = line.match(sigPattern);
+                    if (sigMatch) {
+                        currentMsg.signals.push({
+                            name: sigMatch[1].trim(), 
+                            start_bit: parseInt(sigMatch[2], 10), 
+                            bit_length: parseInt(sigMatch[3], 10),
+                            byte_order: sigMatch[4] === '0' ? 'LITTLE_ENDIAN' : 'BIG_ENDIAN',
+                            data_type: sigMatch[5] === '+' ? 'UNSIGNED' : 'SIGNED',
+                            scale: parseFloat(sigMatch[6]), 
+                            offset: parseFloat(sigMatch[7]), 
+                            min: parseFloat(sigMatch[8]), 
+                            max: parseFloat(sigMatch[9]),
+                            units: sigMatch[10] || "" // Safely defaults to empty if quotes were entirely missing
+                        });
+                        totalSignalsFound++;
+                    }
                 }
             }
-        }
 
-        fileStatus.innerHTML = `✅ Successfully loaded <b>${allMsgNames.length}</b> messages.`;
-        fileStatus.className = "status-text success-text";
-        disableUI(false);
-        searchInput.value = ""; 
-        renderList();
+            if (allMsgNames.length === 0) throw new Error("File scanned, but zero valid messages were successfully extracted. Check file formatting.");
+            if (totalSignalsFound === 0) throw new Error("Messages were found, but zero signals were parsed. The DBC syntax may be heavily corrupted.");
+
+            const { errors, warnings } = validateDbc(parsedDbcData);
+
+            if (errors.length > 0 || warnings.length > 0) {
+                validationReport.style.display = 'block';
+                reportOpen = false;
+                reportBody.style.display = 'none';
+                document.getElementById('reportToggle').innerText = '▼';
+                
+                let reportHtml = '';
+                errors.forEach(err => reportHtml += `<div class="log-error"><b>Error:</b> ${err}</div>`);
+                warnings.forEach(warn => reportHtml += `<div class="log-warn"><b>Warning:</b> ${warn}</div>`);
+                reportBody.innerHTML = reportHtml;
+                
+                let titleText = `Validation: `;
+                if (errors.length > 0) titleText += `<span style="color: var(--error)">${errors.length} Errors</span> `;
+                if (warnings.length > 0) titleText += `${errors.length > 0 ? '| ' : ''}<span style="color: var(--warning)">${warnings.length} Warnings</span>`;
+                reportTitle.innerHTML = titleText;
+            }
+
+            fileStatus.innerHTML = `✅ Successfully loaded <b>${allMsgNames.length}</b> messages.`;
+            fileStatus.className = "status-text success-text";
+            disableUI(false);
+            searchInput.value = ""; 
+            renderList();
+
+        } catch (error) {
+            fileStatus.innerHTML = `❌ <b>Error:</b> ${error.message}`;
+            fileStatus.className = "status-text error-text";
+            disableUI(true);
+            messageList.innerHTML = `<div style="padding: 30px 20px; color: var(--error); text-align: center;"><b>Upload Failed</b><br>${error.message}</div>`;
+            selectionStatus.innerHTML = "0 messages selected.";
+        }
     }
 
     function handleSearch() {
@@ -337,33 +363,19 @@
     function renderList() {
         const query = searchInput.value.toLowerCase();
         let filtered = allMsgNames;
-        if (query !== "") {
-            filtered = allMsgNames.filter(name => name.toLowerCase().includes(query));
-        }
+        if (query !== "") filtered = allMsgNames.filter(name => name.toLowerCase().includes(query));
 
         const displayData = filtered.slice(0, displayLimit);
         let htmlStr = '';
         displayData.forEach(name => {
             const isChecked = selectedMessages.has(name) ? 'checked' : '';
-            htmlStr += `
-                <div class="msg-item">
-                    <input type="checkbox" id="chk_${name}" value="${name}" onchange="toggleSelection(this)" ${isChecked}>
-                    <label for="chk_${name}">${name}</label>
-                </div>
-            `;
+            htmlStr += `<div class="msg-item"><input type="checkbox" id="chk_${name}" value="${name}" onchange="toggleSelection(this)" ${isChecked}><label for="chk_${name}">${name}</label></div>`;
         });
 
-        if (displayData.length === 0) {
-            htmlStr = `<div style="padding: 20px; color: #94a3b8; text-align: center; font-style: italic;">No messages match your search.</div>`;
-        }
-
+        if (displayData.length === 0) htmlStr = `<div style="padding: 20px; color: #94a3b8; text-align: center; font-style: italic;">No messages match your search.</div>`;
         messageList.innerHTML = htmlStr;
 
-        if (filtered.length > displayLimit) {
-            selectionStatus.innerHTML = `Showing top ${displayLimit} of ${filtered.length} matches. | <b style="color:var(--primary)">${selectedMessages.size} selected.</b>`;
-        } else {
-            selectionStatus.innerHTML = `Showing ${filtered.length} matches. | <b style="color:var(--primary)">${selectedMessages.size} selected.</b>`;
-        }
+        selectionStatus.innerHTML = `Showing ${filtered.length > displayLimit ? 'top ' + displayLimit + ' of ' + filtered.length : filtered.length} matches. | <b style="color:var(--primary)">${selectedMessages.size} selected.</b>`;
     }
 
     window.toggleSelection = function(checkbox) {
@@ -374,10 +386,7 @@
 
     function selectAllVisible() {
         const checkboxes = messageList.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(chk => {
-            chk.checked = true;
-            selectedMessages.add(chk.value);
-        });
+        checkboxes.forEach(chk => { chk.checked = true; selectedMessages.add(chk.value); });
         updateSelectionStatus();
     }
 
@@ -394,19 +403,15 @@
     }
 
     function disableUI(disabled) {
-        searchInput.disabled = disabled;
-        selectAllBtn.disabled = disabled;
-        clearAllBtn.disabled = disabled;
-        generateBtn.disabled = disabled;
+        searchInput.disabled = disabled; selectAllBtn.disabled = disabled;
+        clearAllBtn.disabled = disabled; generateBtn.disabled = disabled;
     }
 
     function generateMatlabScript() {
         if (Object.keys(parsedDbcData).length === 0) return;
-
         let targetMsgs = Array.from(selectedMessages);
         if (targetMsgs.length === 0) {
-            const confirmAll = confirm("You haven't selected any specific messages.\n\nDo you want to convert ALL parsed messages in the entire DBC file?");
-            if (confirmAll) targetMsgs = allMsgNames;
+            if (confirm("You haven't selected any specific messages.\n\nDo you want to convert ALL parsed messages in the entire DBC file?")) targetMsgs = allMsgNames;
             else return;
         }
 
@@ -419,9 +424,7 @@
         outStr.push(`  msg.num=${targetMsgs.length};`);
         outStr.push(`  msg.list= cell(1, msg.num);`);
 
-        targetMsgs.forEach((msgName, idx) => {
-            outStr.push(`  msg.list{${idx + 1}}='${msgName}';`);
-        });
+        targetMsgs.forEach((msgName, idx) => outStr.push(`  msg.list{${idx + 1}}='${msgName}';`));
 
         outStr.push(`  else `);
         outStr.push(`  msg = struct;`);
@@ -479,6 +482,5 @@
         document.body.removeChild(a);
     }
 </script>
-
 </body>
 </html>
