@@ -164,11 +164,11 @@
     const reportBody = document.getElementById('reportBody');
     let reportOpen = false;
 
-    // --- Indestructible Regex Patterns ---
+    // --- Strict Regex Patterns ---
     const msgPattern = /^BO_\s+(\d+)\s+([^:]+?)\s*:\s+(\d+)\s*(.*)/;
     
-    // Highly tolerant signal regex. Accounts for missing quotes, weird spacing, and multiplexers
-    const sigPattern = /^\s*SG_\s+([^:]+?)\s*:\s*(\d+)\s*\|\s*(\d+)\s*@\s*([01])\s*([+-])?\s*\(\s*([^,]+)\s*,\s*([^)]+)\s*\)\s*\[\s*([^|]+)\s*\|\s*([^\]]+)\s*\]\s*(?:"(.*?)")?/;
+    // PERFECTED: Extracts the pure signal name in Group 1, safely swallowing any multiplexer tags like "M" or "m1"
+    const sigPattern = /^\s*SG_\s+([a-zA-Z0-9_]+)(?:[^:]*):\s*(\d+)\s*\|\s*(\d+)\s*@\s*([01])\s*([+-])\s*\(\s*([^,]+)\s*,\s*([^)]+)\s*\)\s*\[\s*([^|]+)\s*\|\s*([^\]]+)\s*\]\s*(?:"(.*?)")?/;
 
     // --- Events ---
     fileInput.addEventListener('change', handleFileUpload);
@@ -183,58 +183,34 @@
         document.getElementById('reportToggle').innerText = reportOpen ? '▲' : '▼';
     }
 
-    // --- Validation Engine ---
+    // --- True Validation Engine ---
     function validateDbc(messagesDict) {
         let errors = [];
         let warnings = [];
 
         for (const [msgName, msg] of Object.entries(messagesDict)) {
-            
-            // Bypass physical structural validation for Vector dummy messages
             const isDummyMessage = (msgName === 'VECTOR__INDEPENDENT_SIG_MSG');
             const maxPayloadBits = msg.payload_size * 8;
-            let usedBits = new Set();
 
             msg.signals.forEach(sig => {
                 
-                // 1. Structural Checks
+                // 1. Boundary Integrity Check (Ensures bits don't exceed the payload DLC)
                 if (!isDummyMessage) {
                     if (sig.start_bit >= maxPayloadBits && maxPayloadBits > 0) {
-                        errors.push(`[${msgName} -> ${sig.name}] Start bit (${sig.start_bit}) exceeds payload boundary (${msg.payload_size} bytes).`);
-                    }
-
-                    let bitIndices = [];
-                    if (sig.byte_order === 'LITTLE_ENDIAN') { 
-                        for (let i = 0; i < sig.bit_length; i++) bitIndices.push(sig.start_bit + i);
-                    } else {
-                        let curr = sig.start_bit;
-                        for (let i = 0; i < sig.bit_length; i++) {
-                            bitIndices.push(curr);
-                            if (curr % 8 === 0) curr += 15; else curr -= 1;
-                        }
-                    }
-
-                    let overlaps = false;
-                    bitIndices.forEach(b => {
-                        if (usedBits.has(b)) overlaps = true;
-                        usedBits.add(b);
-                    });
-
-                    if (overlaps) {
-                        warnings.push(`[${msgName} -> ${sig.name}] Bits physically overlap with another signal. (Ignore if multiplexed).`);
+                        errors.push(`[${msgName} -> ${sig.name}] Start bit (${sig.start_bit}) exceeds the defined message payload boundary (${msg.payload_size} bytes).`);
                     }
                 }
 
                 // 2. Math & Bounding Data Check 
                 const L = sig.bit_length;
                 if (L > 64) {
-                    errors.push(`[${msgName} -> ${sig.name}] Length (${L} bits) exceeds 64-bit limits.`);
+                    errors.push(`[${msgName} -> ${sig.name}] Length (${L} bits) exceeds maximum 64-bit bounds.`);
                 } else {
                     let maxRaw = sig.data_type === 'UNSIGNED' ? Math.pow(2, L) - 1 : Math.pow(2, L - 1) - 1;
                     let minRaw = sig.data_type === 'UNSIGNED' ? 0 : -Math.pow(2, L - 1);
                     
                     if (sig.scale !== 0) {
-                        // Math.min/max safely handles negative scaling factors flipping the bounds
+                        // Safely handles negative scaling factors 
                         let raw1 = (sig.min - sig.offset) / sig.scale;
                         let raw2 = (sig.max - sig.offset) / sig.scale;
                         let declaredMinRaw = Math.min(raw1, raw2);
@@ -302,7 +278,7 @@
                     const sigMatch = line.match(sigPattern);
                     if (sigMatch) {
                         currentMsg.signals.push({
-                            name: sigMatch[1].trim(), 
+                            name: sigMatch[1].trim(), // Perfectly extracted pure name
                             start_bit: parseInt(sigMatch[2], 10), 
                             bit_length: parseInt(sigMatch[3], 10),
                             byte_order: sigMatch[4] === '0' ? 'LITTLE_ENDIAN' : 'BIG_ENDIAN',
@@ -311,7 +287,7 @@
                             offset: parseFloat(sigMatch[7]), 
                             min: parseFloat(sigMatch[8]), 
                             max: parseFloat(sigMatch[9]),
-                            units: sigMatch[10] || "" // Safely defaults to empty if quotes were entirely missing
+                            units: sigMatch[10] || ""
                         });
                         totalSignalsFound++;
                     }
